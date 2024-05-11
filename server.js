@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config()
 
+
 // EXPRESS SERVER
 const app = express()
 const PORT = process.env.PORT || 3333;
@@ -14,7 +15,8 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo');
 
 const view_routes = require('./routes/view_routes')
-
+const user_routes = require('./routes/user_routes')
+const thought_routes = require('./routes/thought_routes')
 
 app.use(express.json())
 app.use(express.static('public'))
@@ -30,6 +32,8 @@ app.use(session({
 
 
 app.use('/', view_routes)
+app.use('/api', user_routes)
+app.use('/api/thoughts', thought_routes)
 
 
 db.connection.once('open', () => {
