@@ -14,6 +14,12 @@ const userSchema = new Schema({
         required: true,
 
     },
+    password: {
+        type: String,
+        unique: true,
+        required: true,
+
+    },
     thoughts: {
     type: Schema.Types.ObjectId,
     ref: 'Thought'
