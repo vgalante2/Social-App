@@ -33,7 +33,7 @@ app.use(session({
 
 app.use('/', view_routes)
 app.use('/api', user_routes)
-app.use('/api/thoughts', thought_routes)
+app.use('/api', thought_routes)
 
 
 db.connection.once('open', () => {
