@@ -1,21 +1,38 @@
 const express = require('express');
 const mongoose = require('mongoose');
+require('dotenv').config()
 
+// EXPRESS SERVER
 const app = express()
 const PORT = process.env.PORT || 3333;
 
-const client = require('./config/client')
+
+const db = require('./config/client')
+
+const session = require('express-session')
+
+const MongoStore = require('connect-mongo');
+
+const view_routes = require('./routes/view_routes')
 
 
 app.use(express.json())
+app.use(express.static('public'))
 
 
+app.use(session({
+    secret: process.env.SECRET_SESSION,
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({client: db.client})
+    // cookie: { secure: true }
+  }))
 
 
+app.use('/', view_routes)
 
 
-
-client.once('open', () => {
+db.connection.once('open', () => {
 console.log('Connected to DB')
 
 app.listen(PORT, () => {
