@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const session = require('express-session');
-const { Thought } = require('../model');
+const { Thought, Reaction } = require('../model');
 const ObjectId = require('mongodb').ObjectId;
 
 
@@ -74,6 +74,27 @@ router.put('/thoughts/:id', async (req, res) => {
 catch (err) {
     console.log(err)
 }
+})
+
+
+// Add a reaction to a thought
+router.post('/thoughts/:id/reactions', async (req, res) => {
+    try{
+        const reaction = await Reaction.create(req.body)
+
+        reaction.username = req.body.username
+        reaction.reactionBody = req.body.reactionBody
+
+        req.session.user_id = reaction._id
+
+        res.json({
+            message: 'Reaction posted successfully',
+            reaction
+        })
+    }
+    catch (err) {
+        console.log(err)
+    }
 })
 
 
