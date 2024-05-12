@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { User } = require('../model');
 const ObjectId = require('mongodb').ObjectId;
 
+
 // CREATE A NEW USER
 router.post('/users',async (req, res) => {
   try {
@@ -17,7 +18,6 @@ router.post('/users',async (req, res) => {
     console.log(err)
   }
 })
-
 
 
 // FIND ALL USERS
@@ -54,6 +54,7 @@ router.get('/users/:id', async (req, res) => {
 })
 
 
+// UPDATE A USER BY ID/ UPDATE WITH JSON
 router.put('/users/:id', async (req, res)=> {
     try{
         const updatedUser = await User.updateOne(
@@ -77,11 +78,24 @@ router.put('/users/:id', async (req, res)=> {
 })
 
 
+// DELETE A USER BY ID
+router.delete('/users/:id', async (req, res)=> {
+try{
+    const deletedUser = await User.findByIdAndDelete({_id: req.params.id})
+ 
+    if (!deletedUser) return res.json({message: 'No User found.'})
 
+    res.json({
+        message: 'User deleted successfully'
+       
+    })
 
+}
+catch(err) {
+    console.log(err)
+}
 
-
-
+})
 
 
 
