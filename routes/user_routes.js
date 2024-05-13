@@ -4,7 +4,7 @@ const ObjectId = require('mongodb').ObjectId;
 
 
 // CREATE A NEW USER
-router.post('/users',async (req, res) => {
+router.post('/users', async (req, res) => {
   try {
     const user = await User.create(req.body)
     req.session.user_id = user._id
