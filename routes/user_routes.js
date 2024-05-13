@@ -4,7 +4,7 @@ const ObjectId = require('mongodb').ObjectId;
 
 
 // CREATE A NEW USER
-router.post('/users',async (req, res) => {
+router.post('/users', async (req, res) => {
   try {
     const user = await User.create(req.body)
     req.session.user_id = user._id
@@ -98,5 +98,66 @@ catch(err) {
 })
 
 
+// ADD A NEW FRIEND
+router.post('/users/:userId/friends/:friendId', async (req, res) => {
+    try {
+        const {userId, friendId} = req.params
+
+        const user = await User.findById(userId)
+        if(!user) {
+            return res.json({message: 'Invalid request'})
+        }
+
+        const isAlreadyFriend = user.friends.some(friend => friend.equals(friendId));
+        if (isAlreadyFriend) {
+            return res.json({ message: 'This user is already a friend' });
+        }
+        
+        user.friends.push(friendId)
+        await user.save()
+
+        req.session.user_id = user._id
+
+        res.json({
+            message: 'Friend added successfully',
+            user: {
+                id: user._id,
+                username: user.username,
+                friends: user.friends
+            }
+        })
+    }
+    catch(err) {
+        console.log(err)
+    }
+})
+
+
+// DELETE A FRIEND
+router.delete('/users/:userId/friends/:friendId', async (req, res) => {
+    try {
+        const {userId, friendId} = req.params
+
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { $pull: { friends: friendId } },
+            { new: true }  
+        );
+    
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+    
+        res.json({
+            message: 'Friend deleted successfully',
+            user
+        })
+
+    }
+    catch (err) {
+        console.log(err)
+        res.json({ message: 'Failed to delete friend', error: err.message });
+    }
+})
 
 module.exports = router

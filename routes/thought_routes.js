@@ -81,12 +81,12 @@ catch (err) {
 router.post('/thoughts/:id/reactions', async (req, res) => {
     try{
         const reaction = await Reaction.create(req.body)
-
+        
         reaction.username = req.body.username
         reaction.reactionBody = req.body.reactionBody
 
         req.session.user_id = reaction._id
-
+        
         res.json({
             message: 'Reaction posted successfully',
             reaction
@@ -96,6 +96,7 @@ router.post('/thoughts/:id/reactions', async (req, res) => {
         console.log(err)
     }
 })
+
 
 
 // DELETE A THOUGHT BY ID
@@ -115,7 +116,21 @@ router.delete('/thoughts/:id', async (req, res) => {
 })
 
 
+// DELETE A REACTION BY ID
+router.delete('/thoughts/:id/reactions', async (req, res) => {
+    try{
+        const reaction = await Reaction.findByIdAndDelete(req.params.id)
 
+        if (!reaction) return res.json({message: 'no user found'})
+    
+            res.json({
+                message: 'Reaction deleted successfully'
+            })
+    }
+    catch (err) {
+        console.log(err)
+    }
+})
 
 
 
