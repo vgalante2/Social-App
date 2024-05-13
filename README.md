@@ -8,7 +8,7 @@ Come join us and share your thoughts and reactions with my social app using mong
 - Add your thoughts
 - Add a reaction
 
-
+## Click to see a [Live Preview](https://drive.google.com/file/d/1ezPyGyM2H_tiW-EEfgM4VDmQe7Ir1y8v/view?pli=1)
 
 ## Usage
 
